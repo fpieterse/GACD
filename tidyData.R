@@ -1,17 +1,19 @@
-# tidyData
+# tidyData <<<
 #
 # This function will create a tidy data set from the UCI HAR Dataset
 # This function should be called from a working directory that contains the UCI
 # HAR Dataset in a folder named "UCI HAR Dataset"
-# The function will create a csv file with labeled columns.
+# The function will create a data.frame with labeled columns.
 # Extracted data include the mean and standard deviation of each measurement as
 # well as the test subject's number and descriptive text for the activity
-# performed
-# Test- and Training data is combined into one file
-
+# performed.
+# Test- and Training data is combined into one data.frame
 tidyData <- function(filename="tidyData.txt")
 {
-    # TODO: check folders exist
+    if (!file.exists("UCI HAR Dataset"))
+    {
+        stop("UCI HAR Dataset folder not found.")
+    }
 
 
     selectedFeatureNames <- .readSelectedFeatureNames()
@@ -20,12 +22,15 @@ tidyData <- function(filename="tidyData.txt")
     sep="\t"
 
     featureData <- .readFeatureFrame("test",selectedFeatureNames,activities)
-    write.table(featureData,file=filename,sep=sep,append=FALSE,row.names=FALSE,col.names=TRUE)
+    #write.table(featureData,file=filename,sep=sep,append=FALSE,row.names=FALSE,col.names=TRUE)
 
-    featureData <- .readFeatureFrame("train",selectedFeatureNames,activities)
-    write.table(featureData,file=filename,sep=sep,append=TRUE,row.names=FALSE,col.names=FALSE)
+    featureData <- rbind(featureData,
+        .readFeatureFrame("train",selectedFeatureNames,activities))
 
+
+    featureData
 }
+# >>>
 
 
 # .readSelectedFeatureNames <<<
@@ -76,7 +81,7 @@ tidyData <- function(filename="tidyData.txt")
     # Read test subject number
     filename = paste("UCI HAR Dataset/",folder,"/subject_",folder,".txt",sep="")
     testSubjects <- read.table(filename)
-    names(testSubjects) <- c("Test Subject")
+    names(testSubjects) <- c("TestSubject")
 
     # Read activity
     filename = paste("UCI HAR Dataset/",folder,"/y_",folder,".txt",sep="")
