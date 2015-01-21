@@ -45,6 +45,5 @@ for (subject in subjects)
     }
 }
 
-#
-#
-#
+
+write.table(df,file="tidyData.txt",sep="\t",row.names=F)
