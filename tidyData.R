@@ -9,7 +9,7 @@
 # performed
 # Test- and Training data is combined into one file
 
-tidyData <- function(filename="tidyData.csv")
+tidyData <- function(filename="tidyData.txt")
 {
     # TODO: check folders exist
 
